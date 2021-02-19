@@ -1,13 +1,13 @@
-//get data
-db.collection('guides').get().then (snapshot => {
-    setupGuides(snapshot.docs)
-})
 // listen for auth status changes
-auth.onAuthStateChanged( user => {
-    if(user){
-        console.log('user logged in')
+auth.onAuthStateChanged(user => {
+    if (user) {
+        //get data
+        db.collection('guides').get().then(snapshot => {
+            setupGuides(snapshot.docs);
+        });
     } else {
-        console.log('user logged out')       
+        //ponemos un array vacio como datos
+        setupGuides([]);
     }
 })
 
@@ -22,7 +22,7 @@ signupForm.addEventListener('submit', (e) => {
     const password = signupForm['signup-password'].value;
 
     // signup with email and password
-    auth.createUserWithEmailAndPassword(email, password).then( cred => {
+    auth.createUserWithEmailAndPassword(email, password).then(cred => {
         // console.log(cred.user));
         //Cerramos el modal signup de material
         const modal = document.querySelector('#modal-signup');
@@ -35,11 +35,11 @@ signupForm.addEventListener('submit', (e) => {
 
 //log out
 const logout = document.querySelector('#logout');
-logout.addEventListener ('click', (e) => {
+logout.addEventListener('click', (e) => {
     e.preventDefault();
     auth.signOut()
     // .then(()=>{
-        // console.log ('user signed out')
+    // console.log ('user signed out')
     // });
 });
 
@@ -54,10 +54,10 @@ loginForm.addEventListener('submit', (e) => {
     const password = loginForm['login-password'].value;
 
     // login with email and password
-    auth.signInWithEmailAndPassword(email, password).then (cred => {
+    auth.signInWithEmailAndPassword(email, password).then(cred => {
         // console.log(cred.user);
     })
-    
+
     //Cerramos el modal login de material
     const modal = document.querySelector('#modal-login');
     M.Modal.getInstance(modal).close();
