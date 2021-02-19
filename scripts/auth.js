@@ -25,3 +25,25 @@ logout.addEventListener ('click', (e) => {
         console.log ('user signed out')
     });
 });
+
+//log in
+const loginForm = document.querySelector('#login-form');
+
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    //get user info
+    const email = loginForm['login-email'].value;
+    const password = loginForm['login-password'].value;
+
+    // login with email and password
+    auth.signInWithEmailAndPassword(email, password).then (cred => {
+        console.log(cred.user);
+    })
+    
+    //Cerramos el modal login de material
+    const modal = document.querySelector('#modal-login');
+    M.Modal.getInstance(modal).close();
+    // Reseteamos loginForm -(referencia inicial que teniamos al formulario)
+    loginForm.reset();
+})
