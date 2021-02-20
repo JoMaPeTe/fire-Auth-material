@@ -45,12 +45,18 @@ signupForm.addEventListener('submit', (e) => {
 
     // signup with email and password
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
-        // console.log(cred.user));
-        //Cerramos el modal signup de material
-        const modal = document.querySelector('#modal-signup');
-        M.Modal.getInstance(modal).close();
-        // Reseteamos signupForm -(referencia inicial que teniamos al formulario)
-        signupForm.reset();
+       //creamos nueva colección users, usamos doc(en vez de add) para poder pasar user.uid de auth
+       //creamos el campo bio dentro de la colección, con set
+       return db.collection('users').doc(cred.user.uid).set({     
+        bio: signupForm['signup-bio'].value
+       });
+        // console.log(cred.user)); 
+    }).then(() => {
+          //Cerramos el modal signup de material
+          const modal = document.querySelector('#modal-signup');
+          M.Modal.getInstance(modal).close();
+          // Reseteamos signupForm -(referencia inicial que teniamos al formulario)
+          signupForm.reset();
     });
 });
 
