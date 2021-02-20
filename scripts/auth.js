@@ -2,7 +2,7 @@
 auth.onAuthStateChanged(user => {
     if (user) {
         //get data
-        db.collection('guides').get().then(snapshot => {
+        db.collection('guides').onSnapshot(snapshot => {
             setupGuides(snapshot.docs);
             setupUI(user);
         });
@@ -23,7 +23,7 @@ createForm.addEventListener('submit', (e) => {
         content: createForm['content'].value
     }).then(() => {
         //close the modal and reset form
-        const modal = querySelector('#modal-create');
+        const modal = document.querySelector('#modal-create');
         M.Modal.getInstance(modal).close();
         createForm.reset();
     }).catch(err => {
