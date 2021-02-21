@@ -9,7 +9,7 @@ auth.onAuthStateChanged(user => {
             console.log(err.message);
         });
     } else {
-        setupUI(user);
+        setupUI();
         //ponemos un array vacio como datos
         setupGuides([]);
     }
@@ -82,13 +82,14 @@ loginForm.addEventListener('submit', (e) => {
     const password = loginForm['login-password'].value;
 
     // login with email and password
-    auth.signInWithEmailAndPassword(email, password).then(cred => {
+    auth.signInWithEmailAndPassword(email, password).then(() => {
         // console.log(cred.user);
-    })
-
-    //Cerramos el modal login de material
+        //Cerramos el modal login de material
     const modal = document.querySelector('#modal-login');
     M.Modal.getInstance(modal).close();
     // Reseteamos loginForm -(referencia inicial que teniamos al formulario)
     loginForm.reset();
+    })
+
+    
 })
