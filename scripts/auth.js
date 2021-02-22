@@ -3,9 +3,11 @@ adminForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const adminEmail = document.querySelector('#admin-email').value;
     //comenzamos la llamada a la cloud Function, haciendo una referencia en una const
-    const addAdminRole = functions.httpsCallable ('addAdminRole');
+    const addAdminRole = functions.httpsCallable('addAdminRole');
     //ahora hacemos la llamada invocándola (), y pasamos como parametro el objeto data
-    addAdminRole({email: adminEmail}).then(result => {
+    addAdminRole({
+        email: adminEmail
+    }).then(result => {
         console.log(result);
     });
 });
@@ -61,18 +63,22 @@ signupForm.addEventListener('submit', (e) => {
 
     // signup with email and password
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
-       //creamos nueva colección users, usamos doc(en vez de add) para poder pasar user.uid de auth
-       //creamos el campo bio dentro de la colección, con set
-       return db.collection('users').doc(cred.user.uid).set({     
-        bio: signupForm['signup-bio'].value
-       });
+        //creamos nueva colección users, usamos doc(en vez de add) para poder pasar user.uid de auth
+        //creamos el campo bio dentro de la colección, con set
+        return db.collection('users').doc(cred.user.uid).set({
+            bio: signupForm['signup-bio'].value
+        });
         // console.log(cred.user)); 
     }).then(() => {
-          //Cerramos el modal signup de material
-          const modal = document.querySelector('#modal-signup');
-          M.Modal.getInstance(modal).close();
-          // Reseteamos signupForm -(referencia inicial que teniamos al formulario)
-          signupForm.reset();
+        //Cerramos el modal signup de material
+        const modal = document.querySelector('#modal-signup');
+        M.Modal.getInstance(modal).close();
+        // Reseteamos signupForm -(referencia inicial que teniamos al formulario)
+        signupForm.reset();
+        signupForm.querySelector('.error').innerHTML = '';
+
+    }).catch(err => {
+        signupForm.querySelector('.error').innerHTML = err.message;
     });
 });
 
@@ -101,11 +107,15 @@ loginForm.addEventListener('submit', (e) => {
     auth.signInWithEmailAndPassword(email, password).then(() => {
         // console.log(cred.user);
         //Cerramos el modal login de material
-    const modal = document.querySelector('#modal-login');
-    M.Modal.getInstance(modal).close();
-    // Reseteamos loginForm -(referencia inicial que teniamos al formulario)
-    loginForm.reset();
-    })
+        const modal = document.querySelector('#modal-login');
+        M.Modal.getInstance(modal).close();
+        // Reseteamos loginForm -(referencia inicial que teniamos al formulario)
+        loginForm.reset();
+        loginForm.querySelector('.error').innerHTML = '';
 
-    
+    }).catch(err => {
+        loginForm.querySelector('.error').innerHTML = err.message;
+    });
+
+
 })
