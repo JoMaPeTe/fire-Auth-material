@@ -3,6 +3,12 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 exports.addAdminRole = functions.https.onCall((data, context) => {
+    // comprueba que la petición está hecha por un admin.
+    //Si no es admin, se sale mandando nuestro error como data, result en auth.js
+    if( context.auth.token.admin !== true){
+        return {error: 'only admins can add other admins, sucker'}
+    }
+    
     //obtener user y añadirle custom claim (convertirlo en admin)
     //para obtener el valor se hace return de toda la promise
     return admin.auth().getUserByEmail(data.email).then(user => {
